@@ -1,32 +1,125 @@
 # SHL – Generative AI Assessment Recommendation System
 
-This project implements an offline, end-to-end Assessment Recommendation System
-to map recruiter job descriptions to relevant SHL assessments using semantic similarity.
+This project is a **semantic assessment recommendation system** designed to help recruiters and hiring teams identify the most relevant SHL assessments based on a given job description or hiring requirement.
 
-The focus of this assignment is on data processing, embedding-based retrieval,
-evaluation, and reproducibility rather than live deployment.
+Instead of relying on keyword matching, the system understands the **context and intent** of the query and recommends suitable assessments using **natural language embeddings** and similarity search.
 
 ---
 
-##  Key Features
+##  What This Project Does
 
-- Data ingestion from SHL product URLs provided in the dataset
-- Web scraping using Playwright
-- Text embedding using Sentence Transformers
-- Nearest Neighbor based semantic retrieval
-- Evaluation using Recall@10
-- Final CSV generation for unseen test queries
+- Accepts a **job description / hiring query** as input  
+- Understands intent using **sentence embeddings**
+- Matches the query against SHL assessment descriptions
+- Returns the **most relevant assessments** with similarity scores  
 
----
-
-##  Technical Approach
-
-- **Embedding Model:** `all-MiniLM-L6-v2`
-- **Similarity Search:** scikit-learn NearestNeighbors (cosine similarity)
-- **Backend Logic:** Python scripts
-- **Output:** CSV-based recommendations
+The system is built as an **end-to-end GenAI application** covering data processing, model inference, evaluation, and a browser-based interface.
 
 ---
 
-## Project Structure
+##  Core Approach
 
+### 1️⃣ Semantic Representation  
+Assessment descriptions and user queries are converted into dense vector embeddings using a **sentence-transformer model**.
+
+### 2️⃣ Similarity Search  
+Cosine similarity is used to retrieve the closest matching assessments from the vector space using a **Nearest Neighbors** index.
+
+### 3️⃣ Intelligent Re-Ranking  
+Results are refined using lightweight **text-based boosting** to improve relevance for domain-specific skills.
+
+---
+
+##  Dataset
+
+- SHL assessment metadata extracted from product catalog pages  
+- Cleaned and structured into:
+  - Assessment name  
+  - Skills tags  
+  - Test type  
+  - Canonical description  
+  - Assessment URL  
+
+---
+
+##  Evaluation
+
+The system is evaluated using the **provided labeled training queries**.
+
+- **Metric:** Recall@10  
+- The evaluation confirms that the correct assessment appears within the top-10 recommendations for most queries.
+
+---
+
+##  User Interface
+
+A simple web interface allows users to:
+- Enter a hiring query or job description  
+- Select the number of recommendations  
+- View ranked assessments with:
+  - Assessment name  
+  - Test type  
+  - Skills covered  
+  - Similarity score  
+
+This makes the system easy to test and interpret.
+
+---
+
+##  Tech Stack
+
+- **Python**
+- **Flask**
+- **Sentence-Transformers**
+- **scikit-learn**
+- **Pandas / NumPy**
+- **HTML / CSS / JavaScript**
+
+---
+
+##  Project Structure
+
+SHL-GenAI-Assessment-Recommender/
+│
+├── app.py # Flask API and recommendation logic
+├── build_index.py # Embedding & index creation
+├── fetch_from_excel_playwright.py
+├── clean_catalog.py
+├── retrieve_test.py # CLI testing
+│
+├── data/
+│ ├── catalog_clean.csv
+│ ├── embeddings.npy
+│ ├── metadata.csv
+│ └── nn_model.joblib
+│
+├── templates/
+│ └── index.html
+│
+├── static/
+│ ├── script.js
+│ └── styles.css
+│
+└── README.md
+
+
+---
+
+##  Key Highlights
+
+- Context-aware recommendations (not keyword-based)
+- Clean separation of data processing, model logic, and UI
+- Robust error handling and score normalization
+- Easy to extend with new assessments or models
+
+---
+
+##  Use Case
+
+This system can be used by:
+- Recruiters  
+- Talent acquisition teams  
+- HR platforms  
+- Assessment vendors  
+
+to quickly shortlist the **right assessments** for a given role.
